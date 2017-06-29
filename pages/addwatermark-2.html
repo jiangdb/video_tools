@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>AddWatermark-2</title>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script src="../js/jQueryFileTree.min.js" type="text/javascript"></script>
+    <script src="../js/jquery.easing.js" type="text/javascript"></script>
+    <script src="../js/tether.min.js"></script>
+    <script src="../js/main.js" type="text/javascript"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/jQueryFileTree.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../css/style.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="text-center" style="height: 45px;">
+        <h1>加水印</h1>
+    </div>
+	<form name="watermarkForm" method="post" action="../action.php" class="row" style="height: 600px">
+        <div class="col-sm-6">
+            <label>选择视频</label>
+            <div id="chooseFile" class="input-file"></div>
+        </div>
+        <div class="col-sm-6">
+            <label for="">选择水印</label>
+            <span>注：水印的尺寸要与视频一致</span>
+            <div id="chooseWatermark" class="input-file"></div>
+        </div>
+            <input type="hidden" name="filename" value="">
+            <input type="hidden" name="watermark" value="">
+            <input type="hidden" name="type" value="addwatermark2">
+        <div class="col-sm-12 text-center">
+            <input type="submit" name="submit" value="提交" id="submitBtn" class="btn btn-primary">
+            <button class="btn btn-primary" type="button" onclick='{location.href="../index.php"}'>返回</button>
+        </div>
+
+    </form>
+
+</body>
+<style>
+
+label {
+		margin-right: 20px;
+	}
+	div {
+		margin-bottom: 20px;
+	}
+    form {
+    padding-left: 100px;
+    padding-right: 100px;
+}
+</style>
+<script>
+$(document).ready( function() {
+    $('#chooseWatermark').fileTree({
+        root: '/',
+        script: '../connectors/jqueryFileTree.php'
+    }, function(file) {
+        $("input[name='watermark']").val(file);
+    });
+})
+
+
+</script>
+
+</html>

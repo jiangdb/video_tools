@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Clips</title>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script src="../js/jQueryFileTree.min.js" type="text/javascript"></script>
+    <script src="../js/jquery.easing.js" type="text/javascript"></script>
+    <script src="../js/main.js" type="text/javascript"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/jQueryFileTree.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="text-center">
+        <h1>切片段</h1>
+    </div>
+	<form name="clipsForm" method="post" action="../action.php" class="row">
+        <div class="col-sm-6">
+            <label>选择视频</label>
+            <div id="chooseFile" class="input-file"></div>
+        </div>
+        <div class="col-sm-6" >
+            <label>开始时间</label>
+            <div class="form-group" id="start">
+                <span>(HH)</span>
+                <input type="number" name="start_hour" placeholder="00" min="00" step="1" required> :
+                <span>(MM)</span>
+                <input type="number" name="start_minute" placeholder="00" min="00" max="59" step="1" required> :
+                <span>(SS)</span>
+                <input type="number" name="start_second" placeholder="00" min="00" max="59" step="1" required>
+            </div>
+            <label>结束时间</label>
+            <div class="form-group" id="end">
+                <span>(HH)</span>
+                <input type="number" name="end_hour" placeholder="00" min="00" step="1" required> :
+                <span>(MM)</span>
+                <input type="number" name="end_minute" placeholder="00" min="00" max="59" step="1" required> :
+                <span>(SS)</span>
+                <input type="number" name="end_second" placeholder="00" min="00" max="59" step="1" required>
+            </div>
+            <input type="hidden" name="filename" value="">
+            <input type="hidden" name="type" value="clip">
+            <div class="action">
+            <input type="submit" name="submit" value="提交" id="submitBtn" class="btn btn-primary">
+            <button class="btn btn-primary" type="button" onclick='{location.href="../index.php"}'>返回</button>
+        </div>
+        </div>
+
+    </form>
+
+</body>
+<style>
+
+</style>
+</html>

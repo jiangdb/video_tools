@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Merge</title>
+
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script src="../js/jQueryFileTree.min.js" type="text/javascript"></script>
+    <script src="../js/jquery.easing.js" type="text/javascript"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/jQueryFileTree.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="../css/style.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="text-center">
+        <h1>合并</h1>
+    </div>
+	<form name="mergeForm" method="post" action="../action.php" class="row">
+        <div class="col-sm-6">
+            <label>选择视频</label>
+            <div id="chooseFile" class="input-file"></div>
+        </div>
+        <div class="col-sm-6">
+            <div class="selected-file"></div>
+            <input type="hidden" name="filename" value="">
+            <input type="hidden" name="type" value="merge">
+            <label>合并后名称:</label>
+            <input name="outputName" required>
+            <div class="action">
+                <input type="submit" name="submit" value="提交" id="submitBtn" class="btn btn-primary">
+                <button class="btn btn-primary" type="button" onclick='{location.href="../index.php"}'>返回</button>
+            </div>
+        </div>
+    </form>
+
+</body>
+<style>
+</style>
+<script>
+$(document).ready( function() {
+    $('#chooseFile').fileTree({
+        root: '/',
+        script: '../connectors/jqueryFileTree.php',
+        multiSelect: true
+    });
+    $("form").submit(function(e){
+        $el = $( ".file>input:checked" );
+        if( $el.length === 0 ) {
+            alert("请至少选择一个文件");
+            return false;
+        }
+        var a = [];
+        var sameType=true;
+        $el.each(function(index){
+            var ext = $(this).next().text().split('.').pop().toLowerCase();
+            if( index == 0) {
+                a.push(ext);
+            } else {
+                if(a[0] != ext) {
+                    sameType=false;
+                }
+            }
+        });
+        if (!sameType) {
+            alert("必须选择相同类型的视频文件");
+            return false;
+        }
+        var checked = $el
+                .map(function() {
+                    return $(this).parent().find('a:first').attr('rel');
+                })
+                .get()
+                .join(',');
+        $("input[name='filename']").val(checked);
+    });
+});
+</script>
+
+</html>
