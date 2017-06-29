@@ -99,7 +99,7 @@ switch ($_POST['type']) {
             case '854x480' :
                 switch ($_POST['854x480']) {
                     case '腾讯-独播' :
-                        $WW = 150;$HH = 35;$XX = 600;$YY = 30;$B = 3;
+                        $WW = 150;$HH = 35;$XX = 700;$YY = 30;$B = 3;
                         break;
                     case '优酷-独播' :
                         $WW = 150;$HH = 25;$XX = 680;$YY = 20;$B = 3;
