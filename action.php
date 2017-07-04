@@ -1,5 +1,6 @@
 <?php
 
+
 $data = $_POST;
 $root = '/sharedisk/Dep_Content';
 $path = "task/".date('YmdHis').'.sh';
@@ -9,10 +10,15 @@ $ext = substr($data['filename'],strrpos($data['filename'],'.'));
 $source = '"'.$root.$data['filename'].'"';
 $target = '"'.$root.$base.'_'.$data['type'].'_'.date('YmdHis').$ext.'"';
 
+$codec='';
+if (!isset($_POST['transcode'])) {
+    $codec = ' -c copy ';
+}
+
 fwrite($file, "#!/bin/sh\n\n");
 switch ($_POST['type']) {
     case 'cut_start' :
-        fwrite($file, "ffmpeg -i ".$source." -ss ".sprintf("%02d", $data['hour']).":".sprintf("%02d", $data['minute']).":".sprintf("%02d", $data['second'])." -c copy ".$target);
+        fwrite($file, "ffmpeg -i ".$source." -ss ".sprintf("%02d", $data['hour']).":".sprintf("%02d", $data['minute']).":".sprintf("%02d", $data['second']).$codec.$target);
         break;
     case 'clip' :
         /*
@@ -23,10 +29,10 @@ switch ($_POST['type']) {
         $length_min = ($length%3600)/60;
         $length_sec = ($length%3600)%60;
         */
-        fwrite($file, "ffmpeg -i ".$source." -ss ".sprintf("%02d", $data['start_hour']).":".sprintf("%02d", $data['start_minute']).":".sprintf("%02d", $data['start_second'])." -to ".sprintf("%02d", $data['end_hour']).":".sprintf("%02d", $data['end_minute']).":".sprintf("%02d", $data['end_second'])." -c copy ".$target);
+        fwrite($file, "ffmpeg -i ".$source." -ss ".sprintf("%02d", $data['start_hour']).":".sprintf("%02d", $data['start_minute']).":".sprintf("%02d", $data['start_second'])." -to ".sprintf("%02d", $data['end_hour']).":".sprintf("%02d", $data['end_minute']).":".sprintf("%02d", $data['end_second']).$codec.$target);
         break;
     case 'cut_end' :
-        fwrite($file, "ffmpeg -i ".$source." -ss 00:00:00 -to ".sprintf("%02d", $data['hour']).":".sprintf("%02d", $data['minute']).":".sprintf("%02d", $data['second'])." -c copy ".$target);
+        fwrite($file, "ffmpeg -i ".$source." -ss 00:00:00 -to ".sprintf("%02d", $data['hour']).":".sprintf("%02d", $data['minute']).":".sprintf("%02d", $data['second']).$codec.$target);
         break;
     case 'watermark' :
         $extra = '';
