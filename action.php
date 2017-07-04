@@ -183,7 +183,7 @@ switch ($_POST['type']) {
                 $WW = 165;$HH = 60;$XX = 850;$YY = 18;$B = 6;
                 break;
         }
-        fwrite($file, "ffmpeg -i ".$source." -filter_complex \" [0:v]crop=".$WW.":".$HH.":".$XX.":".$YY.",boxblur=".$B."[b0];".$extra."[0:v][b0]overlay=".$XX.":".$YY.$extra2."\" -map \"[end]\" -map 0:a -c:v libx264 -c:a copy ". $target);
+        fwrite($file, "ffmpeg -i ".$source." -filter_complex \" [0:v]crop=".$WW.":".$HH.":".$XX.":".$YY.",boxblur=".$B."[b0];".$extra."[0:v][b0]overlay=".$XX.":".$YY.$extra2."\" -map \"[end]\" -map 0:a -c:v libx264 -c:a aac ". $target);
         break;
     case 'merge' :
         $filenames = explode(',',$data['filename']);
