@@ -10,7 +10,7 @@ $ext = substr($data['filename'],strrpos($data['filename'],'.'));
 $source = '"'.$root.$data['filename'].'"';
 $target = '"'.$root.$base.'_'.$data['type'].'_'.date('YmdHis').$ext.'"';
 
-$codec='';
+$codec=' ';
 if (!isset($_POST['transcode'])) {
     $codec = ' -c copy ';
 }
