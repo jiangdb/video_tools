@@ -40,6 +40,9 @@
 	<div>
 		<button class="btn btn-primary" type="button" onclick='{location.href="pages/addwatermark-2.html"}'>加水印2</button>
 	</div>
+	<div>
+		<button class="btn btn-primary" type="button" onclick='{location.href="pages/download.html"}'>下载</button>
+	</div>
 	</div>
 
 <?php

@@ -215,6 +215,10 @@ switch ($_POST['type']) {
         // command is ffmpeg -i <file1> -i <watermark file> -filter_complex "[0:v][1:v] overlay[out]" -map "[out]" -map 0:a -c:v libx264 -c:a copy <output>
         fwrite($file, "ffmpeg -i ".$source." -i ".$watermark_file." -filter_complex \"[0:v][1:v] overlay[out]\" -map \"[out]\" -map 0:a -c:v libx264 -c:a copy ".$target);
         break;
+    case 'download':
+        // command is ffmpeg -i <file1> -i <watermark file> -filter_complex "[0:v][1:v] overlay[out]" -map "[out]" -map 0:a -c:v libx264 -c:a copy <output>
+        fwrite($file, 'ffmpeg -i "'.$data['address'].'" -vf -c:v libx264 -c:a aac "'.$data['savePath'].$data['saveName'].'.mp4"');
+        break;
 }
 
 fwrite($file, "\n\necho $?\n\n");
