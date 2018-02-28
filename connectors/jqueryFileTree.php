@@ -85,6 +85,7 @@ function is_video($file) {
           $caseinsensitive === "f4v" ||
           $caseinsensitive === "qt"  ||
           $caseinsensitive === "mpeg"||
+          $caseinsensitive === "kux" ||
           $caseinsensitive === "png") {
           return true;
       }
