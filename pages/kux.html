@@ -41,10 +41,11 @@
 	        </div>
 	        <div class="col-sm-4">
 				<div class="form-group">
-				    <label for="">选择的文件</label>
-				    <input type="text" class="form-control" name="choosedFile" value="" readonly>
+					<label for="">选择的文件</label>
+					<div id="choosedFile">
+					</div>
 			  	</div>
-				<input type="hidden" name="filename" value="">
+				<input type="hidden" name="filenames" value="">
 				<input type="hidden" name="type" value="kux">
 	            <div class="action">
 	                <input type="submit" name="submit" value="转换" id="submitBtn" class="btn btn-primary">
@@ -55,20 +56,27 @@
 	</body>
 	<script>
 		$(document).ready( function() {
+			var filenames = [];
 			$('#chooseFile').fileTree({
 				root: '/',
-				script: '../connectors/jqueryFileTree.php'
+				script: '../connectors/jqueryFileTree.php',
+				multiSelect: true
 			}, function(file) {
-				$("input[name='filename']").val(file);
-				$("input[name='choosedFile']").val(file);
+				if($.inArray(file, filenames) == -1) {
+					filenames.push(file);
+				} else {
+					delete filenames[$.inArray(file, filenames)];
+				}
+				filenames = $.grep(filenames,function(n){ return n == 0 || n });
+				$("input[name='filenames']").val(filenames);
+				$('#choosedFile').html('');
+				$.each(filenames, function( index, value ) {
+					$('#choosedFile').append('<input type="text" id="'+index+'" class="form-control" value="'+value+'" readonly>');
+				});
 			});
 			$("form").submit(function(e){
-				if($("input[name='filename']").val() == ""){
+				if($("input[name='filenames']").val() == ""){
 					alert("please choose a file");
-					return false;
-				}
-				if($("input[name='filename']").val().substr($("input[name='filename']").val().lastIndexOf('.') + 1) !== "kux"){
-					alert("please choose a .kux file");
 					return false;
 				}
 			});
