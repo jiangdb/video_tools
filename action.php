@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 
 
 $data = $_POST;
-$root = '/sharedisk/Dep_Content';
+$root = '/home/share/Dep_Content';
 $path = "task/".date('YmdHis').'.sh';
 $file = fopen($path, "w+");
 $base = substr($data['filename'],0,strrpos($data['filename'],'.'));
@@ -206,7 +206,16 @@ switch ($_POST['type']) {
     case 'transcoding':
         $fps = $data['fps'];
         $resolution = $data['resolution'];
-        fwrite($file, 'ffmpeg -i '.$source.' -c:v libx264 -strict -2 -vf scale='.$resolution.' -r '.$fps.' "'.$root.$base.'_transcoding_'.date('YmdHis').'.mp4"');
+        $bitrate = $data['bitrate'];
+        // if bitrate is empty, then stick to default resolution
+        // if bitrate is specified (it is in Mbps), then use that specific figure
+        if (empty ($bitrate)) {
+            fwrite($file, 'ffmpeg -i '.$source.' -c:v libx264 -strict -2 -vf scale='.$resolution.' -r '.$fps.' "'.$root.$base.'_transcoding_'.date('YmdHis').'.mp4"');
+        } else {
+            $bitrate = $bitrate * 1000;
+            fwrite($file, 'ffmpeg -i '.$source.' -c:v libx264 -strict -2 -vf scale='.$resolution.' -r '.$fps.' -b:v '.$bitrate.'k "'.$root.$base.'_transcoding_'.date('YmdHis').'.mp4"');
+        }
+
         break;
     case 'addwatermark2':
         // get the value for the watermark file
