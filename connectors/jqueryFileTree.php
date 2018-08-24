@@ -26,7 +26,7 @@ if( !array_key_exists('HTTP_REFERER', $_SERVER) ) exit('No direct script access 
  * ex: $root = $_SERVER['DOCUMENT_ROOT'];
  */
 //$root = null;
-$root = '/sharedisk/Dep_Content';
+$root = '/home/share/Dep_Content';
 if( !$root ) exit("ERROR: Root filesystem directory not set in jqueryFileTree.php");
 
 $postDir = rawurldecode($root.(isset($_POST['dir']) ? $_POST['dir'] : null ));
