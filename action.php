@@ -18,7 +18,7 @@ if (!isset($_POST['transcode'])) {
 fwrite($file, "#!/bin/sh\n\n");
 switch ($_POST['type']) {
     case 'cut_start' :
-        fwrite($file, "ffmpeg -i ".$source." -ss ".sprintf("%02d", $data['hour']).":".sprintf("%02d", $data['minute']).":".sprintf("%02d", $data['second']).$codec.$target);
+        fwrite($file, "/usr/bin/ffmpeg -i ".$source." -ss ".sprintf("%02d", $data['hour']).":".sprintf("%02d", $data['minute']).":".sprintf("%02d", $data['second']).$codec.$target);
         break;
     case 'clip' :
         /*
@@ -29,10 +29,10 @@ switch ($_POST['type']) {
         $length_min = ($length%3600)/60;
         $length_sec = ($length%3600)%60;
         */
-        fwrite($file, "ffmpeg -i ".$source." -ss ".sprintf("%02d", $data['start_hour']).":".sprintf("%02d", $data['start_minute']).":".sprintf("%02d", $data['start_second'])." -to ".sprintf("%02d", $data['end_hour']).":".sprintf("%02d", $data['end_minute']).":".sprintf("%02d", $data['end_second']).$codec.$target);
+        fwrite($file, "/usr/bin/ffmpeg -i ".$source." -ss ".sprintf("%02d", $data['start_hour']).":".sprintf("%02d", $data['start_minute']).":".sprintf("%02d", $data['start_second'])." -to ".sprintf("%02d", $data['end_hour']).":".sprintf("%02d", $data['end_minute']).":".sprintf("%02d", $data['end_second']).$codec.$target);
         break;
     case 'cut_end' :
-        fwrite($file, "ffmpeg -i ".$source." -ss 00:00:00 -to ".sprintf("%02d", $data['hour']).":".sprintf("%02d", $data['minute']).":".sprintf("%02d", $data['second']).$codec.$target);
+        fwrite($file, "/usr/bin/ffmpeg -i ".$source." -ss 00:00:00 -to ".sprintf("%02d", $data['hour']).":".sprintf("%02d", $data['minute']).":".sprintf("%02d", $data['second']).$codec.$target);
         break;
     case 'watermark' :
         $extra = '';
@@ -189,7 +189,7 @@ switch ($_POST['type']) {
                 $WW = 165;$HH = 60;$XX = 850;$YY = 18;$B = 6;
                 break;
         }
-        fwrite($file, "ffmpeg -i ".$source." -filter_complex \" [0:v]crop=".$WW.":".$HH.":".$XX.":".$YY.",boxblur=".$B."[b0];".$extra."[0:v][b0]overlay=".$XX.":".$YY.$extra2."\" -map \"[end]\" -map 0:a -c:v libx264 -c:a copy ". $target);
+        fwrite($file, "/usr/bin/ffmpeg -i ".$source." -filter_complex \" [0:v]crop=".$WW.":".$HH.":".$XX.":".$YY.",boxblur=".$B."[b0];".$extra."[0:v][b0]overlay=".$XX.":".$YY.$extra2."\" -map \"[end]\" -map 0:a -c:v libx264 -c:a copy ". $target);
         break;
     case 'merge' :
         $filenames = explode(',',$data['filename']);
@@ -201,7 +201,7 @@ switch ($_POST['type']) {
             fwrite($list, "file '".$root.$filename."'\n");
         }
         fclose($list);
-        fwrite($file, 'ffmpeg -f concat -safe 0 -i '.$file_path.' -c copy "'.$root.$base.$data['outputName'].$ext.'"');
+        fwrite($file, '/usr/bin/ffmpeg -f concat -safe 0 -i '.$file_path.' -c copy "'.$root.$base.$data['outputName'].$ext.'"');
         break;
     case 'transcoding':
         $fps = $data['fps'];
@@ -210,10 +210,10 @@ switch ($_POST['type']) {
         // if bitrate is empty, then stick to default resolution
         // if bitrate is specified (it is in Mbps), then use that specific figure
         if (empty ($bitrate)) {
-            fwrite($file, 'ffmpeg -i '.$source.' -c:v libx264 -strict -2 -vf scale='.$resolution.' -r '.$fps.' "'.$root.$base.'_transcoding_'.date('YmdHis').'.mp4"');
+            fwrite($file, '/usr/bin/ffmpeg -i '.$source.' -c:v libx264 -strict -2 -vf scale='.$resolution.' -r '.$fps.' "'.$root.$base.'_transcoding_'.date('YmdHis').'.mp4"');
         } else {
             $bitrate = $bitrate * 1000;
-            fwrite($file, 'ffmpeg -i '.$source.' -c:v libx264 -strict -2 -vf scale='.$resolution.' -r '.$fps.' -b:v '.$bitrate.'k "'.$root.$base.'_transcoding_'.date('YmdHis').'.mp4"');
+            fwrite($file, '/usr/bin/ffmpeg -i '.$source.' -c:v libx264 -strict -2 -vf scale='.$resolution.' -r '.$fps.' -b:v '.$bitrate.'k "'.$root.$base.'_transcoding_'.date('YmdHis').'.mp4"');
         }
 
         break;
@@ -221,12 +221,12 @@ switch ($_POST['type']) {
         // get the value for the watermark file
         $watermark_file = '"'.$root.$data['watermark'].'"';
         // now execute the ffmpeg command
-        // command is ffmpeg -i <file1> -i <watermark file> -filter_complex "[0:v][1:v] overlay[out]" -map "[out]" -map 0:a -c:v libx264 -c:a copy <output>
-        fwrite($file, "ffmpeg -i ".$source." -i ".$watermark_file." -filter_complex \"[0:v][1:v] overlay[out]\" -map \"[out]\" -map 0:a -c:v libx264 -c:a copy ".$target);
+        // command is /usr/bin/ffmpeg -i <file1> -i <watermark file> -filter_complex "[0:v][1:v] overlay[out]" -map "[out]" -map 0:a -c:v libx264 -c:a copy <output>
+        fwrite($file, "/usr/bin/ffmpeg -i ".$source." -i ".$watermark_file." -filter_complex \"[0:v][1:v] overlay[out]\" -map \"[out]\" -map 0:a -c:v libx264 -c:a copy ".$target);
         break;
     case 'download':
-        // command is ffmpeg -i <file1> -i <watermark file> -filter_complex "[0:v][1:v] overlay[out]" -map "[out]" -map 0:a -c:v libx264 -c:a copy <output>
-        fwrite($file, 'ffmpeg -i "'.$data['address'].'" -vf -c:v libx264 -c:a aac "'.$data['savePath'].$data['saveName'].'.mp4"');
+        // command is /usr/bin/ffmpeg -i <file1> -i <watermark file> -filter_complex "[0:v][1:v] overlay[out]" -map "[out]" -map 0:a -c:v libx264 -c:a copy <output>
+        fwrite($file, '/usr/bin/ffmpeg -i "'.$data['address'].'" -vf -c:v libx264 -c:a aac "'.$data['savePath'].$data['saveName'].'.mp4"');
         break;
     case 'kux':
         $filenames =explode(',', $data['filenames']);
