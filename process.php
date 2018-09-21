@@ -2,7 +2,7 @@
 $processing_dir = __DIR__."/process/";
 $task_dir = __DIR__."/task/";
 $fail_dir = __DIR__."/fail/";
-$max_process=5;
+$max_process=20;
 
 echo date("Y-m-d H:i:s").': start'."\n";
 $processing = glob($processing_dir.'/*.sh');
